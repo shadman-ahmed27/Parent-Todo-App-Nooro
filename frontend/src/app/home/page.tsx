@@ -89,7 +89,7 @@ export default function HomePage() {
           </div>
         ) : (
           <div className="flex flex-col items-center mt-12">
-            <div className="text-gray-500">
+            <div className="text-gray-500 flex justify-center items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-16 w-16"
@@ -100,11 +100,12 @@ export default function HomePage() {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12h6m2 0a9 9 0 11-6.999-8.36A9 9 0 0121 12z"
+                  strokeWidth="2"
+                  d="M12 3.75a8.25 8.25 0 100 16.5 8.25 8.25 0 000-16.5zM9 12h6"
                 />
               </svg>
             </div>
+
             <p className="text-gray-500 mt-4 text-center">
               You don’t have any tasks registered yet.
               <br />

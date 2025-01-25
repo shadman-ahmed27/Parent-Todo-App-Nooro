@@ -14,26 +14,28 @@ export default function EditTaskPage() {
   useEffect(() => {
     if (!taskId) return;
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
-    fetch(`${apiUrl}/tasks`)
-      .then((res) => res.json())
-      .then((tasks) => {
-        const foundTask = tasks.find((t: Task) => t.id === taskId);
-        setTask(foundTask || null);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch task");
+        return res.json();
       })
-      .catch((error) => console.error("Error fetching task:", error));
+      .then((task) => setTask(task))
+      .catch((err) => alert(err.message));
   }, [taskId]);
 
   const updateTask = async () => {
     if (!task?.title) return alert("Title is required.");
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    await fetch(`${apiUrl}/tasks`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(task),
-    });
-    router.push("/home"); // Navigate back to home after updating
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${taskId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(task),
+      });
+      router.push("/home"); // Navigate back to home after updating
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (err) {
+      alert("Failed to update task.");
+    }
   };
 
   return (
