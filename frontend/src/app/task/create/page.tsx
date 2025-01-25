@@ -10,7 +10,7 @@ export default function CreateTaskPage() {
 
   const createTask = async () => {
     if (!title) return alert("Title is required.");
-    await fetch("/api/tasks", {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title, color, completed: false }),

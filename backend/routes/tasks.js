@@ -1,6 +1,5 @@
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
-
 const prisma = new PrismaClient();
 const router = express.Router();
 
@@ -31,21 +30,18 @@ router.post("/", async (req, res) => {
   }
 });
 
-// PUT /tasks/:id - Update a task
-router.put("/:id", async (req, res) => {
+// PATCH /tasks/:id - Update a task
+router.patch("/:id", async (req, res) => {
   const { id } = req.params;
   const { title, color, completed } = req.body;
-
-  try {
-    const updatedTask = await prisma.task.update({
-      where: { id: parseInt(id) },
-      data: { title, color, completed },
-    });
-    res.json(updatedTask);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to update task" });
-  }
+  const updatedTask = await prisma.task.update({
+    where: { id: parseInt(id) },
+    data: { title, color, completed },
+  });
+  res.json(updatedTask);
 });
+
+module.exports = router;
 
 // DELETE /tasks/:id - Delete a task
 router.delete("/:id", async (req, res) => {

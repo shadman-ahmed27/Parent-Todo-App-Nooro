@@ -12,9 +12,16 @@ export default function HomePage() {
 
   // Fetch tasks from the API
   useEffect(() => {
-    fetch("/api/tasks")
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    console.log("Fetching tasks from:", apiUrl);
+
+    fetch(`${apiUrl}/tasks`)
       .then((res) => res.json())
-      .then(setTasks);
+      .then((data) => {
+        console.log("Fetched tasks:", data);
+        setTasks(data);
+      })
+      .catch((error) => console.error("Error fetching tasks:", error));
   }, []);
 
   // Toggle task completion
@@ -23,7 +30,7 @@ export default function HomePage() {
     if (!task) return;
 
     const updatedTask = { ...task, completed: !task.completed };
-    await fetch("/api/tasks", {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedTask),
@@ -35,10 +42,9 @@ export default function HomePage() {
   // Delete task with confirmation
   const deleteTask = async (id: string) => {
     if (confirm("Are you sure you want to delete this task?")) {
-      await fetch("/api/tasks", {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tasks/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
       });
       setTasks(tasks.filter((task) => task.id !== id));
     }
@@ -77,7 +83,7 @@ export default function HomePage() {
                 task={task}
                 onToggle={() => toggleCompletion(task.id)}
                 onDelete={() => deleteTask(task.id)}
-                onEdit={() => router.push(`/task/${task.id}`)}
+                onEdit={() => router.push(`/task/edit?id=${task.id}`)}
               />
             ))}
           </div>

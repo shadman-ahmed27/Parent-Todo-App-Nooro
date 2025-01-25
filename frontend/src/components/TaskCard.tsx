@@ -7,6 +7,7 @@ interface TaskCardProps {
   task: Task;
   onToggle: () => void;
   onDelete: () => void;
+  onEdit: () => void;
 }
 
 export default function TaskCard({ task, onToggle, onDelete }: TaskCardProps) {

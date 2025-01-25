@@ -14,14 +14,21 @@ export default function EditTaskPage() {
   useEffect(() => {
     if (!taskId) return;
 
-    fetch(`/api/tasks`)
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+    fetch(`${apiUrl}/tasks`)
       .then((res) => res.json())
-      .then((tasks) => setTask(tasks.find((t: Task) => t.id === taskId)));
+      .then((tasks) => {
+        const foundTask = tasks.find((t: Task) => t.id === taskId);
+        setTask(foundTask || null);
+      })
+      .catch((error) => console.error("Error fetching task:", error));
   }, [taskId]);
 
   const updateTask = async () => {
     if (!task?.title) return alert("Title is required.");
-    await fetch("/api/tasks", {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    await fetch(`${apiUrl}/tasks`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(task),
