@@ -17,6 +17,7 @@ export default function TaskCard({ task, onToggle, onDelete }: TaskCardProps) {
     <div
       className={`p-4 rounded-md shadow-md flex items-center justify-between ${
         task.completed ? "bg-green-900" : task.color || "bg-gray-800"
+      }
       } cursor-pointer`}
       onClick={() => router.push(`/task/edit?id=${task.id}`)} // Navigate to edit page
     >
